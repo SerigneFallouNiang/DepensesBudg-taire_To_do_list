@@ -10,7 +10,7 @@
   </head>
   <body>
 
-    <section id="to-do-list">
+    <section id="to-do-list" class="hide">
           <!-- nav-bar start -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -107,46 +107,84 @@
 
 
 
-<!-- page connexion de l'utilisateur -->
-    <!-- <section id="page-connexion" class="min-vh-100 d-flex align-items-center bg-light py-5"  id="SectionConnexion" >
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
-                    <div class="bg-white rounded-3 p-4 p-sm-5 shadow-lg">
-                        <h1 class="text-center mb-4 fw-bold fs-2 fs-md-1 "  style="color:#4CAF50;">Inscription</h1>
-                        <form action="" method="POST" id="loginForm">  -->
-
-                            <!-- Nom -->
-                            <!-- <div class="mb-3">
-                                <label for="nom" class="form-label">Nom</label>
-                                <input type="text" class="form-control" name="nom">
-                                <small></small>
-                            </div> -->
-        
-                            <!-- Email -->
-                            <!-- <div class="mb-3">
-                              <label for="email" class="form-label">Email</label>
-                              <input type="text" class="form-control" name="email" >
-                              <small></small>
-                            </div> -->
-        
-                            <!-- Password -->
-                            <!-- <div class="mb-3">
-                              <label for="password" class="form-label">Mot de passe</label>
-                              <input type="text" class="form-control" name="password" >
-                              <small></small>
-                            </div>
-                           
-                           <div class="d-grid">
-                                <button type="submit" class="btn btn-secondary btn-block" style="background-color:#4CAF50;">S'inscrire</button>
-                            </div>
-                          </form>
+<!-- page Inscription de l'utilisateur -->
+<section id="page-connexion" class="hide " id="SectionInscription" >
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+                <div class="bg-white rounded-3 p-4 p-sm-5 shadow-lg">
+                    <h1 class="text-center mb-4 fw-bold text-primary fs-2 fs-md-1">Inscription</h1>
+                    <form id="loginForm">
+                      <div class="mb-4">
+                        <label for="nom" class="form-label visually-hidden">Nom</label>
+                        <input type="text" class="form-control form-control-lg border-0 bg-light" id="nom" placeholder="Nom" required name="nom">
+                        <small></small>
                     </div>
+                        <div class="mb-4">
+                            <label for="email" class="form-label visually-hidden">Email</label>
+                            <input type="text" class="form-control form-control-lg border-0 bg-light" id="email" placeholder="Email" required name="email">
+                            <small></small>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label visually-hidden">Mot de passe</label>
+                            <input type="text" class="form-control form-control-lg border-0 bg-light" id="password" placeholder="Mot de passe" required name="password">
+                            <small></small>
+                        </div>
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4">
+                            <div class="form-check mb-2 mb-sm-0">
+                                <input type="checkbox" class="form-check-input" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Se souvenir de moi</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">S'inscrire</button>
+                        <p class="text-center mb-0">Si vous avez déja un  compte ? <a href="#" class="text-decoration-none">Connexion</a></p>
+                    </form>
                 </div>
             </div>
         </div>
-    </section> -->
-    <!-- Fin page connexion de l'utilisateur -->
+    </div>
+</section>
+<!-- Fin page Inscription de l'utilisateur -->
+
+
+
+
+
+
+<!-- page connexion de l'utilisateur -->
+<section id="page-connexion" class="min-vh-100 d-flex align-items-center bg-light py-5" id="SectionConnexion">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+                <div class="bg-white rounded-3 p-4 p-sm-5 shadow-lg">
+                    <h1 class="text-center mb-4 fw-bold text-primary fs-2 fs-md-1">Connexion</h1>
+                    <form id="registerForm">
+                        <div class="mb-4">
+                            <label for="email" class="form-label visually-hidden">Email</label>
+                            <input type="text" class="form-control form-control-lg border-0 bg-light" id="email" placeholder="Email" required name="email">
+                            <small></small>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label visually-hidden">Mot de passe</label>
+                            <input type="text" class="form-control form-control-lg border-0 bg-light" id="password" placeholder="Mot de passe" required name="password">
+                            <small></small>
+                        </div>
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4">
+                            <div class="form-check mb-2 mb-sm-0">
+                                <input type="checkbox" class="form-check-input" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Se souvenir de moi</label>
+                            </div>
+                            <a href="#" class="text-decoration-none">Mot de passe oublié ?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">Se connecter</button>
+                        <p class="text-center mb-0">Pas encore de compte ? <a href="#" class="text-decoration-none" onclick="showRegister()">S'inscrire</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Fin page connexion de l'utilisateur -->
 
 
 
@@ -154,5 +192,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="js/forme.js"></script>
+  <script src="js/connexion.js"></script>
 </body>
 </html>

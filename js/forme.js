@@ -3,6 +3,9 @@ const url = "https://ktgiutvfjvznkcdnntdk.supabase.co";
 const database = supabase.createClient(url, key);
 
 let form = document.querySelector('#loginForm');
+let SectionConnexion = document.querySelector('#SectionConnexion');
+let SectionInscription = document.querySelector('#SectionInscription'); 
+let toDoListe = document.querySelector('#to-do-list');  
 
 // console.log(form.email);
 // Ecouter la modification de l'email
@@ -164,3 +167,33 @@ if(valid){
       return false ;
 }
 };
+
+
+
+
+
+// Connexion de l'utilisateur
+const formConnexion = document.querySelector('#registerForm'); // Assurez-vous que le bon ID est utilisé
+
+// Écouteur d'événement pour la soumission du formulaire de connexion
+formConnexion.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (validEmail(formConnexion.email) && validPassword(formConnexion.password)) {
+        try {
+            const { data: { user }, error } = await database.auth.signInWithPassword({
+                email: formConnexion.email.value,
+                password: formConnexion.password.value,
+            });
+
+            if (error) throw error;
+
+            alert("Connexion réussie !");
+            // Redirection ou autres actions après connexion réussie
+            // window.location.href = 'dashboard.html'; // Exemple de redirection
+        } catch (error) {
+            alert("Erreur lors de la connexion : " + error.message);
+        }
+    }
+});
+
+
