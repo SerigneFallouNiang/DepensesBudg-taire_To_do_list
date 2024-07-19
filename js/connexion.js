@@ -2,40 +2,45 @@ const key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZi
 const url = "https://ktgiutvfjvznkcdnntdk.supabase.co";
 const database = supabase.createClient(url, key);
 
-// Connexion de l'utilisateur
-const formConnexion = document.querySelector('#registerForm'); // Assurez-vous que le bon ID est utilisé
-
-// Écouteur d'événement pour la soumission du formulaire de connexion
-formConnexion.addEventListener('submit', async function(e) {
+document.querySelector('#produits').addEventListener('submit', async function(e) {
     e.preventDefault();
-    if (validEmail(formConnexion.email.value) && validPassword(formConnexion.password.value)) {
-        try {
-            const { data: { user }, error } = await supabase.auth.signInWithPassword({
-                email: formConnexion.email.value,
-                password: formConnexion.password.value,
-            });
 
-            if (error) throw error;
+    const produit = document.querySelector('#produit').value;
+    const date = document.querySelector('#date').value;
+    const prix = document.querySelector('#prix').value;
+    const quantite = document.querySelector('#quantite').value;
+    const globale = prix * quantite;
+    console.log(globale)
+    // Validation basique
+    if (!produit || !date || !prix || !quantite) {
+        alert('Veuillez remplir tous les champs');
+        return;
+    }
 
-            alert("Connexion réussie !");
-            // Redirection ou autres actions après connexion réussie
-            window.location.href = 'dashboard.html'; // Exemple de redirection
-        } catch (error) {
-            alert("Erreur lors de la connexion : " + error.message);
-        }
-    } else {
-        alert("Veuillez vérifier vos identifiants");
+    // Vérification du format de la date
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        alert('Format de date invalide. Utilisez YYYY-MM-DD');
+        return;
+    }
+
+    try {
+        const { data, error } = await database
+            .from('produits')
+            .insert([{ 
+                produit, 
+                date, 
+                prix: parseFloat(prix), 
+                quantite: parseInt(quantite),
+                globale: parseFloat(globale)
+            }]);
+
+        if (error) throw error;
+
+        alert('Produit ajouté avec succès');
+        document.querySelector('#produits').reset();
+    } catch (error) {
+        alert('Erreur lors de l\'ajout de Produit: ' + error.message);
+        console.error('Erreur lors de l\'ajout de Produit:', error);
     }
 });
 
-// Assurez-vous d'avoir ces fonctions de validation
-function validEmail(email) {
-    // Exemple simple de validation d'email
-    const re = /\S+@\S+\.\S+/;
-    return re.test(email);
-}
-
-function validPassword(password) {
-    // Exemple simple de validation de mot de passe
-    return password.length >= 6;
-}

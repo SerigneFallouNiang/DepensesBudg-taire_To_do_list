@@ -3,10 +3,12 @@ const url = "https://ktgiutvfjvznkcdnntdk.supabase.co";
 const database = supabase.createClient(url, key);
 
 let form = document.querySelector('#loginForm');
+//Ajouter un produit
+let ProduitSave = document.querySelector('#save');
 let SectionConnexion = document.querySelector('#SectionConnexion');
 let SectionInscription = document.querySelector('#SectionInscription'); 
 let toDoListe = document.querySelector('#to-do-list');  
-
+const Deconnexion = document.getElementById('btnDeconnexion');
 // console.log(form.email);
 // Ecouter la modification de l'email
 form.email.addEventListener('input',function(){
@@ -197,3 +199,43 @@ formConnexion.addEventListener('submit', async function(e) {
 });
 
 
+// Écouteur d'événement pour la soumission du formulaire de connexion
+Deconnexion.addEventListener('click', async function(e) {
+    e.preventDefault();
+       // Déconnexion de l'utilisateur
+    try {
+        const { error } = await database.auth.signOut();
+        if (error) throw error;
+        alert("Déconnexion réussie !");
+        // Redirection ou autres actions après déconnexion réussie
+        // window.location.href = 'index.html'; // Exemple de redirection
+    } catch (error) {
+        alert("Erreur lors de la déconnexion : " + error.message);
+    }
+});
+
+
+
+
+
+const produit = document.querySelector('#produit').value;
+const date = document.querySelector('#date').value;
+const prix = document.querySelector('#prix').value;
+const quantite = document.querySelector('#quantite').value;
+
+// Écouteur d'événement pour la soumission du formulaire d'ajout des données
+document.querySelector('#produits').addEventListener('submit', async function(e) {
+    e.preventDefault();
+     // Ajouter l'idée à Supabase
+     const { data, error } = await database
+     .from('produits')
+     .insert([{ produit, date, prix, quantite}]);
+     
+     if (error) {
+        alert('Erreur lors de l\'ajout de Produit');
+        console.error('Erreur lors de l\'ajout de Produit:', error);
+    } else {
+        alert('Produit ajouté avec succès');
+        document.querySelector('#produits').reset();
+    }
+});
