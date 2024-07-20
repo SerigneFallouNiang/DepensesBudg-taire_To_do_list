@@ -144,6 +144,7 @@ if (Deconnexion) {
             if (error) throw error;
             alert("Déconnexion réussie !");
             // Redirection ou autres actions après déconnexion réussie
+            window.location.href = 'connexion.html';
         } catch (error) {
             alert("Erreur lors de la déconnexion : " + error.message);
         }
