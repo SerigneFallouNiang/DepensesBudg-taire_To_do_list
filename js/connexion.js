@@ -147,7 +147,7 @@ async function afficherProduits(dateFilter = '') {
                         </div>
                         <div class="date-globale ml-8 justify-content-end">
                             <p style="font-size: 12px;color: grey;">${produit.date}</p>
-                            <p class="mt-2" style="font-size: 14px;color: grey;">Globale: ${produit.globale}f</p>
+                            <p class="mt-2" style="font-size: 14px;color: grey;">Globale:${produit.globale}f</p>
                         </div>
                     </div>
                 </div>

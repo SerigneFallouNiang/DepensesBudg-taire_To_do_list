@@ -179,7 +179,15 @@ if (produitForm) {
                 .insert([{ produit, date, prix, quantite, globale }]);
 
             if (error) throw error;
-            alert('Produit ajouté avec succès');
+            // alert('Produit ajouté avec succès');
+                    if (error) throw error;
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Produit ajouter avec succes",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
             produitForm.reset();
             afficherProduits();
             populateDateFilter();
@@ -215,6 +223,7 @@ async function populateDateFilter() {
         console.error('Erreur lors de la récupération des dates:', error);
     }
 }
+
 // Fonction pour afficher les produits
 async function afficherProduits(dateFilter = '') {
     const produitList = document.querySelector('#produit-list');
@@ -258,8 +267,8 @@ async function afficherProduits(dateFilter = '') {
 
             // Ajouter un écouteur d'événements pour le clic sur le produit
             produitElement.addEventListener('click', async function() {
-                const produitId = produitElement.getAttribute('data-id');
-                const produitNom = produitElement.getAttribute('data-nom');
+                const produitId = produitElement.querySelector('.card-body').dataset.id;
+                const produitNom = produitElement.querySelector('.card-body').dataset.nom;
                 const { value: action } = await Swal.fire({
                     title: `Que voulez-vous faire avec "${produit.produit}" ?`,
                     icon: 'question',
@@ -273,33 +282,24 @@ async function afficherProduits(dateFilter = '') {
                         denyButton: 'btn btn-danger me-3',
                         cancelButton: 'btn btn-secondary'
                     }
+                }).then((result) => {
+                     /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        Swal.fire("Saved!", "", "success");
+                    } else if (result.isDenied) {
+                      
+                        supprimerProduit(produit.id)
+                    }
                 });
 
-                if (action === 'confirm') {
-                    // Logique pour modifier le produit
-                    // Vous pouvez ouvrir un modal avec un formulaire pré-rempli pour la modification
-                    alert(`Modifier le produit "${produitNom}" avec ID ${produitId}`);
-                } else if (action === 'deny') {
-                    // Logique pour supprimer le produit
-                    try {
-                        const { error } = await database
-                            .from('produits')
-                            .delete()
-                            .eq('id', produit.id);
-
-                        if (error) throw error;
-                        Swal.fire('Produit supprimé !', '', 'success');
-                        afficherProduits(dateFilter); // Recharger les produits après suppression
-                    } catch (error) {
-                        Swal.fire('Erreur', 'Erreur lors de la suppression du produit.', 'error');
-                    }
-                }
+                
             });
         });
     } catch (error) {
         console.error('Erreur lors de la récupération des produits:', error);
     }
 }
+
 // Initialisation
 afficherProduits();
 populateDateFilter();
@@ -310,4 +310,43 @@ if (dateFilter) {
         const selectedDate = this.value;
         afficherProduits(selectedDate);
     });
+}
+
+
+
+// Nouvelle fonction pour supprimer un produit
+async function supprimerProduit(id) {
+    try {
+        const { error } = await database
+            .from('produits')
+            .delete()
+            .eq('id', id);
+
+            Swal.fire({
+                title: "Es-tu sûre ?",
+                text: "Vous ne serez pas en mesure d'inverser cela.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui, Supprimer-le!"
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  Swal.fire({
+                    title: "Supprimé",
+                    text: "Votre dossier a été supprimé.",
+                    icon: "success"
+                  });
+                }
+              });
+          
+        // alert('Produit supprimé avec succès');
+        // Rafraîchir la liste des produits
+        afficherProduits(document.querySelector('#dateFilter').value);
+        afficherProduits();
+        populateDateFilter();
+    } catch (error) {
+        alert('Erreur lors de la suppression du produit: ' + error.message);
+        console.error('Erreur lors de la suppression du produit:', error);
+    }
 }
