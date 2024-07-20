@@ -44,48 +44,65 @@ document.querySelector('#produits').addEventListener('submit', async function(e)
     }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-// Fonction pour afficher les produits depuis Supabase
-async function afficherProduits() {
+// Function to populate date filter options
+async function populateDateFilter() {
     try {
         const { data: produits, error } = await database
             .from('produits')
-            .select('*');
-        
+            .select('date')
+            .order('date', { ascending: true });
+
+        if (error) throw error;
+
+        const uniqueDates = [...new Set(produits.map(produit => produit.date))];
+        const dateFilter = document.querySelector('#dateFilter');
+        dateFilter.innerHTML = '<option selected>Selectionner une date</option>';
+
+        uniqueDates.forEach(date => {
+            const option = document.createElement('option');
+            option.value = date;
+            option.textContent = date;
+            dateFilter.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des dates:', error);
+    }
+}
+
+// Function to display products
+async function afficherProduits(dateFilter = '') {
+    try {
+        const query = database.from('produits').select('*');
+        if (dateFilter) {
+            query.eq('date', dateFilter);
+        }
+
+        const { data: produits, error } = await query;
+
         if (error) throw error;
 
         const produitList = document.querySelector('#produit-list');
-        produitList.innerHTML = ''; // Réinitialiser la liste des produits
+        produitList.innerHTML = ''; // Reset the product list
 
         produits.forEach(produit => {
             const produitElement = document.createElement('div');
             produitElement.classList.add('card', 'mt-4');
             produitElement.innerHTML = `
-             <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                <div class="produit-left flex d-flex">
-                    <div>
-                        <img src="https://img.freepik.com/photos-gratuite/woman-shopping-legumes-au-supermarche_1157-37876.jpg?ga=GA1.1.1272467380.1720960746&semt=ais_user" alt="" style="width: 80px;">
-                    </div>
-                    <div class="ml-6">
-                        <h4><strong>${produit.produit}</strong></h4>
-                        <p class="mt-2">${produit.prix}f</p>
-                    </div>
-                </div>
-                <div class="date-globale ml-8 justify-content-end">
-                    <p style="font-size: 12px;color: grey;">${produit.date}</p>
-                    <p class="mt-2" style="font-size: 14px;color: grey;">Globale: ${produit.globale}f</p>
-                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="produit-left flex d-flex">
+                            <div>
+                                <img src="https://img.freepik.com/photos-gratuite/woman-shopping-legumes-au-supermarche_1157-37876.jpg?ga=GA1.1.1272467380.1720960746&semt=ais_user" alt="" style="width: 80px;">
+                            </div>
+                            <div class="ml-6">
+                                <h4><strong>${produit.produit}</strong></h4>
+                                <p class="mt-2">${produit.prix}f</p>
+                            </div>
+                        </div>
+                        <div class="date-globale ml-8 justify-content-end">
+                            <p style="font-size: 12px;color: grey;">${produit.date}</p>
+                            <p class="mt-2" style="font-size: 14px;color: grey;">Globale: ${produit.globale}f</p>
+                        </div>
                     </div>
                 </div>
             `;
@@ -96,6 +113,14 @@ async function afficherProduits() {
     }
 }
 
-// Appel initial pour afficher les produits lorsqu'on charge la page
+// Initial call to display products and populate the date filter
 afficherProduits();
+populateDateFilter();
+
+// Ajouter un evennement pour  ecouter le changement du date filtre
+document.querySelector('#dateFilter').addEventListener('change', function() {
+    const selectedDate = this.value;
+    afficherProduits(selectedDate);
+});
+
 
