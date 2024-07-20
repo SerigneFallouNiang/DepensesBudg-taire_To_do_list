@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue sur TélMarché</title>
+    <!-- cdn font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+        <!-- Tailwind CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container-custom {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .content {
+            border: 1px solid green;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border-radius: 5px;
+        }
+        .content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .text-section {
+            margin-left: 20px;
+        }
+        .btn-custom {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container container-custom">
+        <div class="content flex flex-wrap">
+            <div class="col-md-6">
+                <img src="https://img.freepik.com/photos-gratuite/woman-shopping-legumes-au-supermarche_1157-37876.jpg?t=st=1721391554~exp=1721395154~hmac=1c959a2dc1aa179c071bb416e0c355668985cc49d449b0b762469751b1b7b153&w=1380" alt="Shopping Image">
+            </div>
+            <div class="col-md-4 text-section mt-8">
+                <h3 style="color: #4CAF50;"><i class="fa-solid fa-arrow-right fa-flip-horizontal mr-12" style="color: #4CAF50;"></i><strong>S'inscrire</strong></h3>
+                <form id="loginForm">
+                    <div class="mb-4">
+                      <label for="nom" class="form-label visually-hidden">Nom</label>
+                      <input type="text" class="form-control form-control-lg border-0 bg-light" id="nom" placeholder="Nom" required name="nom">
+                      <small></small>
+                  </div>
+                      <div class="mb-4">
+                          <label for="email" class="form-label visually-hidden">Email</label>
+                          <input type="text" class="form-control form-control-lg border-0 bg-light" id="email" placeholder="Email" required name="email">
+                          <small></small>
+                      </div>
+                      <div class="mb-4">
+                          <label for="password" class="form-label visually-hidden">Mot de passe</label>
+                          <input type="text" class="form-control form-control-lg border-0 bg-light" id="password" placeholder="Mot de passe" required name="password">
+                          <small></small>
+                      </div>
+                      <button type="submit" class="btn btn-success btn-lg w-100 mb-3">S'inscrire</button>
+                      <p class="text-center mb-0">Si vous avez déja un  compte ? <a href="connexion.html" class="text-decoration-none text-success">Connexion</a></p>
+                  </form>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="js/forme.js"></script>
+</body>
+</html>

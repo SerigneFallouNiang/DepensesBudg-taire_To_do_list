@@ -1,32 +1,142 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Inscription</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/forme.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  </head>
-  <body>
-    <div class="container">
-        <div class="row mt-5">
-            <form>
-                <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Email :</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Saisie votre email">
-                  <div id="emailHelp" class="form-text"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .col img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<section id="to-do-list">
+    <!-- nav-bar start -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Logo </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Budget</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">History</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Date</a></li>
+                            <li><a class="dropdown-item" href="#">07/05/2024</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <button id="btnDeconnexion" class="btn btn-outline-danger">Déconnexion</button>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Recherche" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Recherche</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <!-- nav-bar end -->
+
+    <div class="container mt-14">
+        <div class="row row-cols-1 w-100 row-cols-lg-2">
+            <div class="col">
+                <img src="https://img.freepik.com/photos-gratuite/woman-shopping-legumes-au-supermarche_1157-37876.jpg?t=st=1721391554~exp=1721395154~hmac=1c959a2dc1aa179c071bb416e0c355668985cc49d449b0b762469751b1b7b153&w=1380" alt="Shopping Image">
+            </div>
+            <div class="col">
+                <!-- bouton d'ajout des tâches -->
+                <div class="container my-4 my-lg-0">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h4>Ajouter un Produit</h4>
+                                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModal">Ajouter</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label">Mot de Passe :</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1"  placeholder="Saisie votre Mot de passe ">
+                <!-- bouton d'ajout des tâches fin -->
+
+                <!-- The Modal -->
+                <div class="modal fade" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Ajouter un produit</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <form action="" id="produits">
+                                    <div class="my-3">
+                                        <label for="date">Date</label>
+                                        <input type="date" name="date" id="date" class="form-control">
+                                    </div>
+                                    <div class="my-3">
+                                        <label for="produit">Produit</label>
+                                        <input type="text" name="produit" id="produit" class="form-control">
+                                    </div>
+                                    <div class="my-3">
+                                        <label for="prix">Prix</label>
+                                        <input type="number" name="prix" id="prix" class="form-control">
+                                    </div>
+                                    <div class="my-3">
+                                        <label for="quantite">Quantité</label>
+                                        <input type="number" name="quantite" id="quantite" class="form-control">
+                                    </div>
+                                    <div class="my-3 d-flex justify-content-between">
+                                        <button class="btn btn-primary w-sm-100" type="submit" id="save">Ajouter</button>
+                                        <button class="btn btn-outline-danger w-sm-100" type="reset" id="annulerAjoutProduit">Annuler</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3 form-check">
-                  <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                  <label class="form-check-label" for="exampleCheck1">Se souvient de Moi</label>
+
+                  <!-- filtre par date -->
+                  <select class="form-select form-select-sm my-3" name="dateFilter" id="dateFilter">
+                    <option selected>Selectionner une date</option>
+                </select>
+                <!-- filtre par date -->
+
+
+                <!-- liste des produits -->
+                <div class="container my-4 my-lg-0">
+                    <div id="produit-list" >
+                       <!-- contenue des produits -->
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">S'inscrire</button>
-              </form>
+                <!-- fin liste des produits -->
+
+                
+            </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  </body>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="js/connexion.js"></script>
+</body>
 </html>
