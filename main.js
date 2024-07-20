@@ -285,7 +285,7 @@ async function afficherProduits(dateFilter = '') {
                 }).then((result) => {
                      /* Read more about isConfirmed, isDenied below */
                     if (result.isConfirmed) {
-                        Swal.fire("Saved!", "", "success");
+                        ouvrirModalModification(produit.id); 
                     } else if (result.isDenied) {
                       
                         supprimerProduit(produit.id)
@@ -313,40 +313,129 @@ if (dateFilter) {
 }
 
 
-
-// Nouvelle fonction pour supprimer un produit
+// Fonction pour supprimer un produit
 async function supprimerProduit(id) {
     try {
-        const { error } = await database
-            .from('produits')
-            .delete()
-            .eq('id', id);
+        const result = await Swal.fire({
+            title: "Êtes-vous sûr ?",
+            text: "Vous ne pourrez pas revenir en arrière !",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Oui, supprimer !",
+            cancelButtonText: "Annuler"
+        });
 
-            Swal.fire({
-                title: "Es-tu sûre ?",
-                text: "Vous ne serez pas en mesure d'inverser cela.",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Oui, Supprimer-le!"
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  Swal.fire({
-                    title: "Supprimé",
-                    text: "Votre dossier a été supprimé.",
-                    icon: "success"
-                  });
-                }
-              });
-          
-        // alert('Produit supprimé avec succès');
-        // Rafraîchir la liste des produits
-        afficherProduits(document.querySelector('#dateFilter').value);
+        if (result.isConfirmed) {
+            const { error } = await database
+                .from('produits')
+                .delete()
+                .eq('id', id);
+
+            if (error) throw error;
+
+            Swal.fire('Supprimé !', 'Le produit a été supprimé.', 'success');
+            afficherProduits(document.querySelector('#dateFilter').value);
+            populateDateFilter();
+        }
         afficherProduits();
         populateDateFilter();
     } catch (error) {
-        alert('Erreur lors de la suppression du produit: ' + error.message);
-        console.error('Erreur lors de la suppression du produit:', error);
+        console.error('Erreur lors de la suppression:', error);
+        Swal.fire('Erreur', 'Impossible de supprimer le produit', 'error');
     }
 }
+
+
+
+
+
+async function modifierProduit(id) {
+    try {
+        const { error } = await database
+            .from('produits')
+            .update(id)
+            .eq('id', id);
+
+        if (error) throw error;
+
+        Swal.fire({
+            title: "Modifié",
+            text: "Votre produit a été modifié avec succès.",
+            icon: "success"
+        });
+
+        afficherProduits(document.querySelector('#dateFilter').value);
+    } catch (error) {
+        alert('Erreur lors de la modification du produit: ' + error.message);
+        console.error('Erreur lors de la modification du produit:', error);
+    }
+}
+
+
+async function AficheFormmodifier(id) {
+    try {
+        const { error } = await database
+            .from('produits')
+            .select('*')
+            .eq('id', id);
+
+        if (error) throw error;
+
+        Swal.fire({
+            title: "Modifié",
+            text: "Votre produit a été modifié avec succès.",
+            icon: "success"
+        });
+
+        afficherProduits(document.querySelector('#dateFilter').value);
+    } catch (error) {
+        alert('Erreur lors de la modification du produit: ' + error.message);
+        console.error('Erreur lors de la modification du produit:', error);
+    }
+}
+
+
+
+
+
+
+//Fonction pour la modification
+// Fonction pour ouvrir le modal de modification
+function ouvrirModalModification(produit) {
+    document.getElementById('editId').value = produit.id;
+    document.getElementById('editDate').value = produit.date;
+    document.getElementById('editProduit').value = produit.produit;
+    document.getElementById('editPrix').value = produit.prix;
+    document.getElementById('editQuantite').value = produit.quantite;
+    new bootstrap.Modal(document.getElementById('editModal')).show();
+}
+
+// Gestionnaire pour le formulaire de modification
+document.getElementById('editProduit').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const id = document.getElementById('editId').value;
+    const date = document.getElementById('editDate').value;
+    const produit = document.getElementById('editProduit').value;
+    const prix = parseFloat(document.getElementById('editPrix').value);
+    const quantite = parseInt(document.getElementById('editQuantite').value);
+    const globale = prix * quantite;
+
+    try {
+        const { data, error } = await database
+            .from('produits')
+            .update({ date, produit, prix, quantite, globale })
+            .eq('id', id);
+
+        if (error) throw error;
+
+        Swal.fire('Succès', 'Le produit a été modifié avec succès', 'success');
+        bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+        afficherProduits(document.querySelector('#dateFilter').value);
+    } catch (error) {
+        console.error('Erreur lors de la modification:', error);
+        Swal.fire('Erreur', 'Impossible de modifier le produit', 'error');
+    }
+});

@@ -118,6 +118,45 @@
                     </div>
                 </div>
 
+
+                <!-- The Modal for Modification -->
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Modifier un produit</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form action="" id="editProduit">
+                    <input type="hidden" id="editId">
+                    <div class="my-3">
+                        <label for="editDate">Date</label>
+                        <input type="date" name="editDate" id="editDate" class="form-control">
+                    </div>
+                    <div class="my-3">
+                        <label for="editProduit">Produit</label>
+                        <input type="text" name="editProduit" id="editProduit" class="form-control">
+                    </div>
+                    <div class="my-3">
+                        <label for="editPrix">Prix</label>
+                        <input type="number" name="editPrix" id="editPrix" class="form-control">
+                    </div>
+                    <div class="my-3">
+                        <label for="editQuantite">Quantité</label>
+                        <input type="number" name="editQuantite" id="editQuantite" class="form-control">
+                    </div>
+                    <div class="my-3 d-flex justify-content-between">
+                        <button class="btn btn-primary w-sm-100" type="submit" id="saveEdit">Modifier</button>
+                        <button class="btn btn-outline-danger w-sm-100" type="button" data-bs-dismiss="modal">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
                   <!-- filtre par date -->
                   <select class="form-select form-select-sm my-3" name="dateFilter" id="dateFilter">
                     <option selected>Selectionner une date</option>
