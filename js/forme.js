@@ -10,22 +10,7 @@ let SectionInscription = document.querySelector('#SectionInscription');
 let toDoListe = document.querySelector('#to-do-list');  
 const Deconnexion = document.getElementById('btnDeconnexion');
 // console.log(form.email);
-// Ecouter la modification de l'email
-form.email.addEventListener('input',function(){
-validEmail(this);  
-});
 
-
-// Ecouter la modification du password
-// le petit e sert à récuperer l'évennement
-form.password.addEventListener('input',function(){
-    validPassword(this);  
-    });
-
-    // le changement du nom
-form.nom.addEventListener('input',function(){
-    validNom(this);  
-    });
 
 
 // Ecouter la soumission du formulaire
@@ -52,6 +37,25 @@ form.addEventListener('submit', async function(e) {
         }
     }
 });
+// Ecouter la modification de l'email
+form.email.addEventListener('input',function(){
+validEmail(this);  
+});
+
+
+// Ecouter la modification du password
+// le petit e sert à récuperer l'évennement
+form.password.addEventListener('input',function(){
+    validPassword(this);  
+    });
+
+    // le changement du nom
+form.nom.addEventListener('input',function(){
+    validNom(this);  
+    });
+
+
+
 
 //********************** */ validation Email******************
 const validEmail = function (inputEmail){
@@ -175,7 +179,7 @@ if(valid){
 
 
 // Connexion de l'utilisateur
-const formConnexion = document.querySelector('#registerForm'); // Assurez-vous que le bon ID est utilisé
+const formConnexion = document.querySelector('#registerForm'); 
 
 // Écouteur d'événement pour la soumission du formulaire de connexion
 formConnexion.addEventListener('submit', async function(e) {
@@ -208,7 +212,7 @@ Deconnexion.addEventListener('click', async function(e) {
         if (error) throw error;
         alert("Déconnexion réussie !");
         // Redirection ou autres actions après déconnexion réussie
-        // window.location.href = 'index.html'; // Exemple de redirection
+         window.location.href = 'index.html'; // Exemple de redirection
     } catch (error) {
         alert("Erreur lors de la déconnexion : " + error.message);
     }
