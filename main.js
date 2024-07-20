@@ -215,7 +215,6 @@ async function populateDateFilter() {
         console.error('Erreur lors de la récupération des dates:', error);
     }
 }
-
 // Fonction pour afficher les produits
 async function afficherProduits(dateFilter = '') {
     const produitList = document.querySelector('#produit-list');
@@ -237,7 +236,7 @@ async function afficherProduits(dateFilter = '') {
             const produitElement = document.createElement('div');
             produitElement.classList.add('card', 'mt-4');
             produitElement.innerHTML = `
-                <div class="card-body">
+                <div class="card-body" data-id="${produit.id}" data-nom="${produit.produit}">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="produit-left flex d-flex">
                             <div>
@@ -256,12 +255,51 @@ async function afficherProduits(dateFilter = '') {
                 </div>
             `;
             produitList.appendChild(produitElement);
+
+            // Ajouter un écouteur d'événements pour le clic sur le produit
+            produitElement.addEventListener('click', async function() {
+                const produitId = produitElement.getAttribute('data-id');
+                const produitNom = produitElement.getAttribute('data-nom');
+                const { value: action } = await Swal.fire({
+                    title: `Que voulez-vous faire avec "${produit.produit}" ?`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Modifier',
+                    cancelButtonText: 'Annuler',
+                    showDenyButton: true,
+                    denyButtonText: 'Supprimer',
+                    customClass: {
+                        confirmButton: 'btn btn-primary me-3',
+                        denyButton: 'btn btn-danger me-3',
+                        cancelButton: 'btn btn-secondary'
+                    }
+                });
+
+                if (action === 'confirm') {
+                    // Logique pour modifier le produit
+                    // Vous pouvez ouvrir un modal avec un formulaire pré-rempli pour la modification
+                    alert(`Modifier le produit "${produitNom}" avec ID ${produitId}`);
+                } else if (action === 'deny') {
+                    // Logique pour supprimer le produit
+                    try {
+                        const { error } = await database
+                            .from('produits')
+                            .delete()
+                            .eq('id', produit.id);
+
+                        if (error) throw error;
+                        Swal.fire('Produit supprimé !', '', 'success');
+                        afficherProduits(dateFilter); // Recharger les produits après suppression
+                    } catch (error) {
+                        Swal.fire('Erreur', 'Erreur lors de la suppression du produit.', 'error');
+                    }
+                }
+            });
         });
     } catch (error) {
         console.error('Erreur lors de la récupération des produits:', error);
     }
 }
-
 // Initialisation
 afficherProduits();
 populateDateFilter();
