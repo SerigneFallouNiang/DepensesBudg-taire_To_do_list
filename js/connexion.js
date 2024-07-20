@@ -122,5 +122,3 @@ document.querySelector('#dateFilter').addEventListener('change', function() {
     const selectedDate = this.value;
     afficherProduits(selectedDate);
 });
-
-
