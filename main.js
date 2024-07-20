@@ -350,66 +350,31 @@ async function supprimerProduit(id) {
 
 
 
-
-async function modifierProduit(id) {
+//Fonction pour la modification
+// Fonction pour ouvrir la modal de modification et pré-remplir avec les détails du produit
+async function ouvrirModalModification(id) {
     try {
-        const { error } = await database
-            .from('produits')
-            .update(id)
-            .eq('id', id);
-
-        if (error) throw error;
-
-        Swal.fire({
-            title: "Modifié",
-            text: "Votre produit a été modifié avec succès.",
-            icon: "success"
-        });
-
-        afficherProduits(document.querySelector('#dateFilter').value);
-    } catch (error) {
-        alert('Erreur lors de la modification du produit: ' + error.message);
-        console.error('Erreur lors de la modification du produit:', error);
-    }
-}
-
-
-async function AficheFormmodifier(id) {
-    try {
-        const { error } = await database
+        const { data: produit, error } = await database
             .from('produits')
             .select('*')
-            .eq('id', id);
+            .eq('id', id)
+            .single(); // Assurez-vous de récupérer un seul enregistrement
 
         if (error) throw error;
 
-        Swal.fire({
-            title: "Modifié",
-            text: "Votre produit a été modifié avec succès.",
-            icon: "success"
-        });
+        // Pré-remplir le formulaire de modification avec les détails du produit
+        document.querySelector('#editId').value = produit.id;
+        document.querySelector('#editDate').value = produit.date;
+        document.querySelector('#editProduit').value = produit.produit;
+        document.querySelector('#editPrix').value = produit.prix;
+        document.querySelector('#editQuantite').value = produit.quantite;
 
-        afficherProduits(document.querySelector('#dateFilter').value);
+        // Ouvrir la modal
+        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+        editModal.show();
     } catch (error) {
-        alert('Erreur lors de la modification du produit: ' + error.message);
-        console.error('Erreur lors de la modification du produit:', error);
+        console.error('Erreur lors de la récupération des détails du produit:', error);
     }
-}
-
-
-
-
-
-
-//Fonction pour la modification
-// Fonction pour ouvrir le modal de modification
-function ouvrirModalModification(produit) {
-    document.getElementById('editId').value = produit.id;
-    document.getElementById('editDate').value = produit.date;
-    document.getElementById('editProduit').value = produit.produit;
-    document.getElementById('editPrix').value = produit.prix;
-    document.getElementById('editQuantite').value = produit.quantite;
-    new bootstrap.Modal(document.getElementById('editModal')).show();
 }
 
 // Gestionnaire pour le formulaire de modification
