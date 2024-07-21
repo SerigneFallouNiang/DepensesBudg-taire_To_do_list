@@ -279,7 +279,7 @@ function creerElementProduit(produit) {
                     <div>
                         <img src="https://img.freepik.com/photos-gratuite/woman-shopping-legumes-au-supermarche_1157-37876.jpg?ga=GA1.1.1272467380.1720960746&semt=ais_user" alt="" style="width: 80px;">
                     </div>
-                    <div class="ml-6">
+                    <div class="ml-8">
                         <h4><strong>${produit.produit}</strong></h4>
                         <p class="mt-2">${produit.prix}f</p>
                     </div>
