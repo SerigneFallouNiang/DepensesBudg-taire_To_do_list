@@ -239,11 +239,17 @@ async function afficherProduits(dateFilter = '') {
 
         if (error) throw error;
 
-        produitList.innerHTML = '';
+        produitList.innerHTML = '<h3>Produits à acheter</h3>';
+        let produitsAchetes = '<h3 class="mt-4">Produits déjà achetés</h3><hr>';
+        // produitList.innerHTML = '';
 
         produits.forEach(produit => {
             const produitElement = document.createElement('div');
             produitElement.classList.add('card', 'mt-4');
+            // Ajoutez la classe 'produit-achete' si le produit a été acheté
+            if (produit.acheter) {
+                produitElement.classList.add('produit-achete');
+            }
             produitElement.innerHTML = `
                 <div class="card-body" data-id="${produit.id}" data-nom="${produit.produit}">
                     <div class="d-flex justify-content-between align-items-center">
@@ -263,7 +269,12 @@ async function afficherProduits(dateFilter = '') {
                     </div>
                 </div>
             `;
-            produitList.appendChild(produitElement);
+            // produitList.appendChild(produitElement);
+            if (produit.acheter) {
+                produitsAchetes += produitElement.outerHTML;
+            } else {
+                produitList.appendChild(produitElement);
+            }
 
             // Ajouter un écouteur d'événements pour le clic sur le produit
             produitElement.addEventListener('click', async function() {
@@ -298,6 +309,7 @@ async function afficherProduits(dateFilter = '') {
                 
             });
         });
+        // produitList.innerHTML += produitsAchetes;
     } catch (error) {
         console.error('Erreur lors de la récupération des produits:', error);
     }
