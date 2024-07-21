@@ -176,7 +176,7 @@ if (produitForm) {
         try {
             const { data, error } = await database
                 .from('produits')
-                .insert([{ produit, date, prix, quantite, globale }]);
+                .insert([{ produit, date, prix, quantite, globale ,acheter: false }]);
 
             if (error) throw error;
             // alert('Produit ajouté avec succès');
@@ -274,7 +274,7 @@ async function afficherProduits(dateFilter = '') {
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonText: 'Modifier',
-                    cancelButtonText: 'Annuler',
+                    cancelButtonText: 'Acheter',
                     showDenyButton: true,
                     denyButtonText: 'Supprimer',
                     customClass: {
@@ -287,8 +287,11 @@ async function afficherProduits(dateFilter = '') {
                     if (result.isConfirmed) {
                         ouvrirModalModification(produit.id); 
                     } else if (result.isDenied) {
-                      
                         supprimerProduit(produit.id)
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        // supprimerProduit(produit.id)
+                        AcheterProduit(produit.id);
                     }
                 });
 
@@ -399,8 +402,34 @@ document.getElementById('editProduit').addEventListener('submit', async (e) => {
         Swal.fire('Succès', 'Le produit a été modifié avec succès', 'success');
         bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
         afficherProduits(document.querySelector('#dateFilter').value);
+        // Initialisation
+            afficherProduits();
+            populateDateFilter();
     } catch (error) {
         console.error('Erreur lors de la modification:', error);
         Swal.fire('Erreur', 'Impossible de modifier le produit', 'error');
     }
 });
+
+
+// Marquage des produits acheté
+// Fonction pour approuver une idée
+async function AcheterProduit(id) {
+    try {
+        const { error } = await database.from('produits').update({ acheter: true }).eq('id', id);
+
+        if (error) {
+            throw error;
+        }
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Produit acheté avec succes",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        updateIdeasList();
+    } catch (error) {
+        console.error('Erreur lors de l\'achat du produit', error);
+    }
+}
