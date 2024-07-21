@@ -223,8 +223,6 @@ async function populateDateFilter() {
         console.error('Erreur lors de la récupération des dates:', error);
     }
 }
-
-// Fonction pour afficher les produits
 async function afficherProduits(dateFilter = '') {
     const produitList = document.querySelector('#produit-list');
     if (!produitList) return;
@@ -239,80 +237,90 @@ async function afficherProduits(dateFilter = '') {
 
         if (error) throw error;
 
-        produitList.innerHTML = '<h3>Produits à acheter</h3>';
-        let produitsAchetes = '<h3 class="mt-4">Produits déjà achetés</h3><hr>';
-        // produitList.innerHTML = '';
+        // Réinitialiser complètement le contenu
+        produitList.innerHTML = '';
+
+        // Créer les sections pour les produits à acheter et déjà achetés
+        const produitsAAcheter = document.createElement('div');
+        produitsAAcheter.innerHTML = '<h3>Produits à acheter</h3>';
+        
+        const produitsAchetes = document.createElement('div');
+        produitsAchetes.innerHTML = '<h3 class="mt-4">Produits déjà achetés</h3><hr>';
 
         produits.forEach(produit => {
-            const produitElement = document.createElement('div');
-            produitElement.classList.add('card', 'mt-4');
-            // Ajoutez la classe 'produit-achete' si le produit a été acheté
+            const produitElement = creerElementProduit(produit);
+            
             if (produit.acheter) {
-                produitElement.classList.add('produit-achete');
-            }
-            produitElement.innerHTML = `
-                <div class="card-body" data-id="${produit.id}" data-nom="${produit.produit}">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="produit-left flex d-flex">
-                            <div>
-                                <img src="https://img.freepik.com/photos-gratuite/woman-shopping-legumes-au-supermarche_1157-37876.jpg?ga=GA1.1.1272467380.1720960746&semt=ais_user" alt="" style="width: 80px;">
-                            </div>
-                            <div class="ml-6">
-                                <h4><strong>${produit.produit}</strong></h4>
-                                <p class="mt-2">${produit.prix}f</p>
-                            </div>
-                        </div>
-                        <div class="date-globale ml-8 justify-content-end">
-                            <p style="font-size: 12px;color: grey;">${produit.date}</p>
-                            <p class="mt-2" style="font-size: 14px;color: grey;">Globale: ${produit.globale}f</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-            // produitList.appendChild(produitElement);
-            if (produit.acheter) {
-                produitsAchetes += produitElement.outerHTML;
+                produitsAchetes.appendChild(produitElement);
             } else {
-                produitList.appendChild(produitElement);
+                produitsAAcheter.appendChild(produitElement);
             }
-
-            // Ajouter un écouteur d'événements pour le clic sur le produit
-            produitElement.addEventListener('click', async function() {
-                const produitId = produitElement.querySelector('.card-body').dataset.id;
-                const produitNom = produitElement.querySelector('.card-body').dataset.nom;
-                const { value: action } = await Swal.fire({
-                    title: `Que voulez-vous faire avec "${produit.produit}" ?`,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Modifier',
-                    cancelButtonText: 'Acheter',
-                    showDenyButton: true,
-                    denyButtonText: 'Supprimer',
-                    customClass: {
-                        confirmButton: 'btn btn-primary me-3',
-                        denyButton: 'btn btn-danger me-3',
-                        cancelButton: 'btn btn-secondary'
-                    }
-                }).then((result) => {
-                     /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        ouvrirModalModification(produit.id); 
-                    } else if (result.isDenied) {
-                        supprimerProduit(produit.id)
-                    }
-                    else if (result.dismiss === Swal.DismissReason.cancel) {
-                        // supprimerProduit(produit.id)
-                        AcheterProduit(produit.id);
-                    }
-                });
-
-                
-            });
         });
-        // produitList.innerHTML += produitsAchetes;
+
+        // Ajouter les deux sections au produitList
+        produitList.appendChild(produitsAAcheter);
+        produitList.appendChild(produitsAchetes);
+
     } catch (error) {
         console.error('Erreur lors de la récupération des produits:', error);
     }
+}
+
+function creerElementProduit(produit) {
+    const produitElement = document.createElement('div');
+    produitElement.classList.add('card', 'mt-4');
+    if (produit.acheter) {
+        produitElement.classList.add('produit-achete');
+    }
+    produitElement.innerHTML = `
+        <div class="card-body" data-id="${produit.id}" data-nom="${produit.produit}">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="produit-left flex d-flex">
+                    <div>
+                        <img src="https://img.freepik.com/photos-gratuite/woman-shopping-legumes-au-supermarche_1157-37876.jpg?ga=GA1.1.1272467380.1720960746&semt=ais_user" alt="" style="width: 80px;">
+                    </div>
+                    <div class="ml-6">
+                        <h4><strong>${produit.produit}</strong></h4>
+                        <p class="mt-2">${produit.prix}f</p>
+                    </div>
+                </div>
+                <div class="date-globale ml-8 justify-content-end">
+                    <p style="font-size: 12px;color: grey;">${produit.date}</p>
+                    <p class="mt-2" style="font-size: 14px;color: grey;">Globale: ${produit.globale}f</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Ajouter un écouteur d'événements pour le clic sur le produit
+    produitElement.addEventListener('click', async function() {
+        const produitId = produitElement.querySelector('.card-body').dataset.id;
+        const produitNom = produitElement.querySelector('.card-body').dataset.nom;
+        const { value: action } = await Swal.fire({
+            title: `Que voulez-vous faire avec "${produit.produit}" ?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Modifier',
+            cancelButtonText: 'Acheter',
+            showDenyButton: true,
+            denyButtonText: 'Supprimer',
+            customClass: {
+                confirmButton: 'btn btn-primary me-3',
+                denyButton: 'btn btn-danger me-3',
+                cancelButton: 'btn btn-secondary'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                ouvrirModalModification(produit.id); 
+            } else if (result.isDenied) {
+                supprimerProduit(produit.id)
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                AcheterProduit(produit.id);
+            }
+        });
+    });
+
+    return produitElement;
 }
 
 // Initialisation
