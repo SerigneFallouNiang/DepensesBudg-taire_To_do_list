@@ -316,11 +316,9 @@ function creerElementProduit(produit) {
           }).then((result) => {
             if (result.isConfirmed) {
                 RestaurerProduit(produit.id) 
-            //   Swal.fire({
-            //     title: "Restauré !",
-            //     text: "Allez voire la liste des Produits",
-            //     icon: "success"
-            //   });
+            // Initialisation
+                afficherProduits();
+                populateDateFilter();
             }
           });
     });
@@ -345,9 +343,13 @@ function creerElementProduit(produit) {
             if (result.isConfirmed) {
                 ouvrirModalModification(produit.id); 
             } else if (result.isDenied) {
-                supprimerProduit(produit.id)
+                supprimerProduit(produit.id);
+                
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 AcheterProduit(produit.id);
+                  // Initialisation
+                  afficherProduits();
+                  populateDateFilter();
             }
         });
     });
@@ -500,7 +502,7 @@ async function RestaurerProduit(id) {
         Swal.fire({
             position: "top-end",
             icon: "success",
-            title: "Produit acheté avec succes",
+            title: "Produit Restauré  avec succes",
             showConfirmButton: false,
             timer: 1500
           });
