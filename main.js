@@ -484,7 +484,8 @@ async function AcheterProduit(id) {
             showConfirmButton: false,
             timer: 1500
           });
-        updateIdeasList();
+          afficherProduits();
+          populateDateFilter();
     } catch (error) {
         console.error('Erreur lors de l\'achat du produit', error);
     }
@@ -506,7 +507,8 @@ async function RestaurerProduit(id) {
             showConfirmButton: false,
             timer: 1500
           });
-        updateIdeasList();
+        afficherProduits();
+        populateDateFilter();
     } catch (error) {
         console.error('Erreur lors de l\'achat du produit', error);
     }
