@@ -300,7 +300,32 @@ function creerElementProduit(produit) {
         </div>
     `;
 
-    // Ajouter un écouteur d'événements pour le clic sur le produit
+
+    if (produit.acheter) {
+         // Ajouter un écouteur d'événements pour le clic sur le produit
+    produitElement.addEventListener('click', async function() {
+        const produitId = produitElement.querySelector('.card-body').dataset.id;
+        const { value: action } = await Swal.fire({
+            title: "Déja acheté",
+            text:`Que voulez-vous faire avec "${produit.produit}" ?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Restaurer"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                RestaurerProduit(produit.id) 
+            //   Swal.fire({
+            //     title: "Restauré !",
+            //     text: "Allez voire la liste des Produits",
+            //     icon: "success"
+            //   });
+            }
+          });
+    });
+    }else{
+             // Ajouter un écouteur d'événements pour le clic sur le produit
     produitElement.addEventListener('click', async function() {
         const produitId = produitElement.querySelector('.card-body').dataset.id;
         const { value: action } = await Swal.fire({
@@ -326,6 +351,8 @@ function creerElementProduit(produit) {
             }
         });
     });
+    }
+   
 
     return produitElement;
 }
@@ -444,6 +471,28 @@ document.getElementById('editProduit').addEventListener('submit', async (e) => {
 async function AcheterProduit(id) {
     try {
         const { error } = await database.from('produits').update({ acheter: true }).eq('id', id);
+
+        if (error) {
+            throw error;
+        }
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Produit acheté avec succes",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        updateIdeasList();
+    } catch (error) {
+        console.error('Erreur lors de l\'achat du produit', error);
+    }
+}
+
+
+// Fonction pour Restaurer un produits 
+async function RestaurerProduit(id) {
+    try {
+        const { error } = await database.from('produits').update({ acheter: false }).eq('id', id);
 
         if (error) {
             throw error;
