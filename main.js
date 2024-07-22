@@ -285,7 +285,6 @@ function creerElementProduit(produit) {
             <div class="d-flex justify-content-between align-items-center">
                 <div class="produit-left flex d-flex">
                     <div>
-                        <img src="https://img.freepik.com/photos-gratuite/woman-shopping-legumes-au-supermarche_1157-37876.jpg?ga=GA1.1.1272467380.1720960746&semt=ais_user" alt="" style="width: 80px;">
                     </div>
                     <div class="ml-8">
                         <h4><strong>${produit.produit}</strong></h4>
