@@ -99,7 +99,7 @@ if (form) {
                     }
                 });
                 if (error) throw error;
-                alert("Vous êtes inscrit avec succès ! Veuillez vérifier votre email pour confirmer votre compte.");
+                window.location.href = 'connexion.html';
                 form.reset();
             } catch (error) {
                 alert("Erreur lors de l'inscription : " + error.message);
@@ -113,27 +113,35 @@ if (form) {
     if (form.nom) form.nom.addEventListener('input', function() { validNom(this); });
 }
 
-// Gestionnaire d'événement pour la connexion
+// Connexion de l'utilisateur
+
 if (formConnexion) {
     formConnexion.addEventListener('submit', async function(e) {
         e.preventDefault();
-        if (formConnexion.email && formConnexion.password &&
-            validEmail(formConnexion.email) && validPassword(formConnexion.password)) {
+
+        const emailInput = formConnexion.querySelector('input[name="email"]');
+        const passwordInput = formConnexion.querySelector('input[name="password"]');
+
+        if (emailInput && passwordInput && 
+            validEmail(emailInput) && validPassword(passwordInput)) {
             try {
-                const { data: { user }, error } = await database.auth.signInWithPassword({
-                    email: formConnexion.email.value,
-                    password: formConnexion.password.value,
+                const { data, error } = await database.auth.signInWithPassword({
+                    email: emailInput.value,
+                    password: passwordInput.value,
                 });
+
                 if (error) throw error;
+
                 alert("Connexion réussie !");
                 window.location.href = 'index.html';
-                // Redirection ou autres actions après connexion réussie
             } catch (error) {
                 alert("Erreur lors de la connexion : " + error.message);
             }
+        } else {
+            alert("Veuillez entrer un email et un mot de passe valides.");
         }
     });
-}
+} 
 
 // Gestionnaire d'événement pour la déconnexion
 if (Deconnexion) {
@@ -295,7 +303,6 @@ function creerElementProduit(produit) {
     // Ajouter un écouteur d'événements pour le clic sur le produit
     produitElement.addEventListener('click', async function() {
         const produitId = produitElement.querySelector('.card-body').dataset.id;
-        const produitNom = produitElement.querySelector('.card-body').dataset.nom;
         const { value: action } = await Swal.fire({
             title: `Que voulez-vous faire avec "${produit.produit}" ?`,
             icon: 'question',
