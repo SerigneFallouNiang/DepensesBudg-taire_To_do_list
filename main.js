@@ -99,7 +99,7 @@ if (form) {
                     }
                 });
                 if (error) throw error;
-                window.location.href = 'connexion.html';
+                window.location.href = 'index.html';
                 form.reset();
             } catch (error) {
                 alert("Erreur lors de l'inscription : " + error.message);
@@ -131,7 +131,7 @@ if (formConnexion) {
                 });
 
                 if (error) throw error;
-                window.location.href = 'index.html';
+                window.location.href = 'accueil.html';
             } catch (error) {
                 alert("Erreur lors de la connexion : " + error.message);
             }
@@ -150,7 +150,7 @@ if (Deconnexion) {
             if (error) throw error;
             alert("Déconnexion réussie !");
             // Redirection ou autres actions après déconnexion réussie
-            window.location.href = 'connexion.html';
+            window.location.href = 'index.html';
         } catch (error) {
             alert("Erreur lors de la déconnexion : " + error.message);
         }
