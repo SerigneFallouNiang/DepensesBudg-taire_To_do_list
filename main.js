@@ -453,7 +453,7 @@ async function ouvrirModalModification(id) {
         // Pré-remplir le formulaire de modification avec les détails du produit
         document.querySelector('#editId').value = produit.id;
         document.querySelector('#editDate').value = produit.date;
-        document.querySelector('#editProduit').value = produit.produit;
+        document.querySelector('#nomProduit').value = produit.produit;
         document.querySelector('#editPrix').value = produit.prix;
         document.querySelector('#editQuantite').value = produit.quantite;
 
@@ -474,7 +474,7 @@ document.getElementById('editProduit').addEventListener('submit', async (e) => {
     
     const id = document.getElementById('editId').value;
     const date = document.getElementById('editDate').value;
-    const produit = document.getElementById('editProduit').value;
+    const produit = document.getElementById('nomProduit').value;
     const prix = parseFloat(document.getElementById('editPrix').value);
     const quantite = parseInt(document.getElementById('editQuantite').value);
     const globale = prix * quantite;
