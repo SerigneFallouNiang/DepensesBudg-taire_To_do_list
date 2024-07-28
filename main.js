@@ -131,8 +131,6 @@ if (formConnexion) {
                 });
 
                 if (error) throw error;
-
-                alert("Connexion réussie !");
                 window.location.href = 'index.html';
             } catch (error) {
                 alert("Erreur lors de la connexion : " + error.message);
@@ -159,6 +157,20 @@ if (Deconnexion) {
     });
 }
 
+
+// Fonction pour récupérer l'ID de l'utilisateur connecté
+async function getUserId() {
+    try {
+        const { data: { user }, error } = await database.auth.getUser();
+        if (error) throw error;
+        return user.id;
+    } catch (error) {
+        console.error('Erreur lors de la récupération de l\'ID utilisateur:', error);
+        return null;
+    }
+}
+
+
 // Gestionnaire d'événement pour l'ajout de produit
 if (produitForm) {
     produitForm.addEventListener('submit', async function(e) {
@@ -168,6 +180,9 @@ if (produitForm) {
         const prix = parseFloat(document.querySelector('#prix')?.value);
         const quantite = parseInt(document.querySelector('#quantite')?.value);
         const globale = prix * quantite;
+
+
+      
 
         // Vérification des champs
         if (!produit || !date || isNaN(prix) || isNaN(quantite)) {
@@ -182,9 +197,13 @@ if (produitForm) {
         }
 
         try {
-            const { data, error } = await database
+            const userId = await getUserId(); // Récupérer l'ID utilisateur connecté
+            if (!userId) throw new Error('Utilisateur non authentifié.');
+             
+
+             const { data, error } = await database
                 .from('produits')
-                .insert([{ produit, date, prix, quantite, globale ,acheter: false }]);
+                .insert([{ produit, date, prix, quantite, globale ,acheter: false ,user_id: userId }]);
 
             if (error) throw error;
             // alert('Produit ajouté avec succès');
@@ -236,7 +255,18 @@ async function afficherProduits(dateFilter = '') {
     if (!produitList) return;
 
     try {
-        const query = database.from('produits').select('*');
+        const userId = await getUserId(); // Récupérer l'ID utilisateur connecté
+        if (!userId) throw new Error('Utilisateur non authentifié.');
+
+
+           // Assurez-vous que dateFilter est une date valide avant de l'utiliser
+           if (dateFilter === 'Sélectionner une date' || !/^\d{4}-\d{2}-\d{2}$/.test(dateFilter)) {
+            dateFilter = ''; // Ne pas filtrer par date si la valeur est invalide
+        }
+
+
+        const query = database.from('produits').select('*').eq('user_id', userId); // Filtrer par user_id
+
         if (dateFilter) {
             query.eq('date', dateFilter);
         }
@@ -426,6 +456,9 @@ async function ouvrirModalModification(id) {
         document.querySelector('#editProduit').value = produit.produit;
         document.querySelector('#editPrix').value = produit.prix;
         document.querySelector('#editQuantite').value = produit.quantite;
+
+             // Vérification des valeurs pré-remplies
+             console.log(produit.produit);
 
         // Ouvrir la modal
         const editModal = new bootstrap.Modal(document.getElementById('editModal'));
